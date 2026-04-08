@@ -2,12 +2,12 @@
 title: Email Triage OpenEnv
 emoji: 📧
 colorFrom: blue
-colorTo: navy
+colorTo: indigo
 sdk: docker
 app_port: 7860
 pinned: false
 tags:
-- openenv
+  - openenv
 ---
 
 # Email Triage OpenEnv 📧
