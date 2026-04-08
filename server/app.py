@@ -6,6 +6,10 @@ app = FastAPI(title="Email Triage OpenEnv")
 
 env = EmailTriageEnv()
 
+@app.get("/")
+def root():
+    return {"status": "ok", "name": "email-triage_OpenEnv"}
+
 @app.post("/reset")
 def reset(task_id: str = "easy"):
     obs = env.reset(task_id=task_id)
