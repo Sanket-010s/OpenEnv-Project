@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Email Triage OpenEnv 📧
 
 A complete, real-world OpenEnv environment adhering to the Meta PyTorch Hackathon constraints.
@@ -52,3 +53,15 @@ python inference.py
 - **Action Space (`models.Action`):** String Literal `category` (`SPAM`, `BILLING`, `COMPLAINT`, `SUPPORT`, `URGENT`, `LATER`)
 - **Observation Space (`models.Observation`):** Evaluates `subject`, `body`, and `sender` attributes representing the current message sequence.
 - **State Space (`models.State`):** Internal tracker containing the `current_index`, `task_id`, and scalar `score`.
+=======
+---
+title: Email-triage OpenEnv
+emoji: 📊
+colorFrom: indigo
+colorTo: gray
+sdk: docker
+pinned: false
+---
+
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+>>>>>>> fe1c5eca4f8a7362c56bab6ee74fd93c9d1b0972
