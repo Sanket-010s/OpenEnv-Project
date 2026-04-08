@@ -1,0 +1,21 @@
+version: 1.0
+name: email-triage-env
+description: "A real-world OpenEnv environment for categorizing emails into URGENT, LATER, or SPAM."
+author: "Pro Developer"
+
+tasks:
+  - id: "easy"
+    description: "Identify 3 obvious spam emails"
+  - id: "medium"
+    description: "Identify urgent business emails among regular communication"
+  - id: "hard"
+    description: "Triage a difficult block of emails containing priority requests and tricky spam"
+
+environment:
+  entrypoint: "uvicorn server.app:app --host 0.0.0.0 --port 8000"
+  type: "fastapi"
+
+models:
+  action_space: "models:Action"
+  observation_space: "models:Observation"
+  state_space: "models:State"
