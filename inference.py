@@ -14,7 +14,7 @@ client = OpenAI(
     api_key=HF_TOKEN
 )
 
-env_client = PlayClient("http://localhost:8000")
+env_client = PlayClient("http://localhost:7860")
 
 def run_task(task_id: str):
     print(f"[START] Task: {task_id}")

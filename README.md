@@ -4,7 +4,7 @@ emoji: 📧
 colorFrom: blue
 colorTo: indigo
 sdk: docker
-app_port: 8000
+app_port: 7860
 pinned: false
 tags:
   - openenv
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 
 ### 2) Run the Environment API
 ```bash
-uvicorn server.app:app --host 0.0.0.0 --port 8000
+uvicorn server.app:app --host 0.0.0.0 --port 7860
 ```
 
 ### 3) Run the Baseline Inference Agent (in another terminal)
