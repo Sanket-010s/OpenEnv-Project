@@ -4,15 +4,15 @@ EMAILS_DATABASE = {
     "easy": [
         {
         "subject": "Congratulations! You won $1,000,000!!!",
-        "body": "Click this link to claim your prize. Send your bank details now!!!",
+        "body": "Click this link NOW to claim your prize. Send your bank details immediately!!!",
         "sender": "noreply@totallylegit.xyz",
         "correct_priority": "low",
         "correct_category": "spam",
         "difficulty": "easy",
     },
     {
-        "subject": "FREE GIFT CARDS - Limited offer inside",
-        "body": "You have been selected for a special promotion. Get free gift cards worth $500. Act now!!!",
+        "subject": "FREE GIFT CARDS - Limited offer inside!!!",
+        "body": "You have been selected for a special promotion. Get $500 gift cards. Act NOW before offer expires!!!",
         "sender": "offers@promo-deals.net",
         "correct_priority": "low",
         "correct_category": "spam",
@@ -20,7 +20,7 @@ EMAILS_DATABASE = {
     },
     {
         "subject": "You are a WINNER! Claim your Tesla now",
-        "body": "Dear lucky winner, you have been randomly selected. Click here and enter your credit card to verify identity.",
+        "body": "Dear lucky winner, click here and enter your credit card to verify your identity and claim prize.",
         "sender": "winner@scam-alert.ru",
         "correct_priority": "low",
         "correct_category": "spam",
@@ -28,8 +28,16 @@ EMAILS_DATABASE = {
     },
     {
         "subject": "Make $5000 a day working from home!!!",
-        "body": "No experience needed. Join thousands of people already making money. Limited spots available. Sign up now!",
+        "body": "No experience needed. Join thousands already making money. Limited spots. Sign up now!",
         "sender": "jobs@workfromhome-scam.com",
+        "correct_priority": "low",
+        "correct_category": "spam",
+        "difficulty": "easy",
+    },
+    {
+        "subject": "URGENT: Your account needs verification!!!",
+        "body": "Click the link below and enter your password to avoid account suspension. Act immediately!",
+        "sender": "security@fake-bank.xyz",
         "correct_priority": "low",
         "correct_category": "spam",
         "difficulty": "easy",
