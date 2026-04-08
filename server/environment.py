@@ -121,6 +121,7 @@ EMAILS_DATABASE = {
     ]
 }
 
+
 class EmailTriageEnv:
     def __init__(self):
         self.state = State(current_index=0, score=0.0, task_id="easy", completed=False)
@@ -135,7 +136,12 @@ class EmailTriageEnv:
 
     def _get_observation(self) -> Observation:
         if self.state.completed or self.state.current_index >= len(self.dataset):
-            return Observation(subject="", body="", sender="", metadata={"info": "No more emails", "score": self.state.score})
+            return Observation(
+                subject="",
+                body="",
+                sender="",
+                metadata={"info": "No more emails", "score": self.state.score}
+            )
         email = self.dataset[self.state.current_index]
         return Observation(
             subject=email["subject"],
@@ -149,27 +155,29 @@ class EmailTriageEnv:
 
     def step(self, action: Action):
         if self.state.completed:
-            return self._get_observation(), 0.0, True, {"info": "Episode completed"}
+            return self._get_observation(), 0.1, True, {"info": "Episode completed"}
 
         current_email = self.dataset[self.state.current_index]
-        
-        # Safely handle your new dataset properties!
-        correct_label = current_email.get("label", current_email.get("correct_category", "LATER")).upper()
-        
+
+        correct_label = current_email.get(
+            "label", current_email.get("correct_category", "LATER")
+        ).upper()
+
         is_correct = action.category.upper() == correct_label
-        reward = 1.0 if is_correct else 0.0
-        
+        reward = 0.9 if is_correct else 0.1  # strictly between 0 and 1
+
         self.state.score += reward
         self.state.current_index += 1
         done = self.state.current_index >= len(self.dataset)
-        
+
         if done:
             self.state.completed = True
-        
-        task_score = self.state.score / len(self.dataset) if done else 0.0
+
+        raw_score = self.state.score / len(self.dataset) if done else 0.1
+        task_score = max(0.01, min(0.99, raw_score))  # strictly between 0 and 1
         info = {"is_correct": is_correct, "task_score": task_score}
-        
+
         return self._get_observation(), reward, done, info
-        
+
     def state_obj(self):
         return self.state
