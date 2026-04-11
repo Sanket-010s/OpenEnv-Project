@@ -1,0 +1,46 @@
+{
+  "model": "gpt-3.5-turbo",
+  "api_base_url": "https://api.openai.com/v1",
+  "runtime_seconds": 0.02648639678955078,
+  "overall_avg_score": 0.4466666666666667,
+  "task_results": [
+    {
+      "task_id": "easy",
+      "avg_score": 0.42000000000000004,
+      "success": false,
+      "steps": 5,
+      "rewards": [
+        0.9,
+        0.1,
+        0.9,
+        0.1,
+        0.1
+      ]
+    },
+    {
+      "task_id": "medium",
+      "avg_score": 0.5,
+      "success": true,
+      "steps": 4,
+      "rewards": [
+        0.9,
+        0.1,
+        0.9,
+        0.1
+      ]
+    },
+    {
+      "task_id": "hard",
+      "avg_score": 0.42000000000000004,
+      "success": false,
+      "steps": 5,
+      "rewards": [
+        0.1,
+        0.1,
+        0.1,
+        0.9,
+        0.9
+      ]
+    }
+  ]
+}

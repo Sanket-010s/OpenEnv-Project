@@ -8,18 +8,23 @@ env = EmailTriageEnv()
 
 @app.get("/")
 def root():
-    return {"status": "ok", "name": "email-triage_OpenEnv"}
+    return {"status": "ok", "name": "email-triage-openenv"}
+
+@app.get("/health")
+def health():
+    """Health check endpoint for validator."""
+    return {"status": "healthy", "environment": "email-triage"}
 
 @app.post("/reset")
 def reset(task_id: str = "easy"):
     obs = env.reset(task_id=task_id)
-    return {"observation": obs.dict()}
+    return {"observation": obs.model_dump(), "task_id": task_id}
 
 @app.post("/step")
 def step(action: Action):
     obs, reward, done, info = env.step(action)
     return {
-        "observation": obs.dict(),
+        "observation": obs.model_dump(),
         "reward": reward,
         "done": done,
         "info": info
@@ -27,7 +32,7 @@ def step(action: Action):
 
 @app.get("/state")
 def get_state():
-    return env.state_obj().dict()
+    return env.state_obj().model_dump()
 
 def main():
     import uvicorn
