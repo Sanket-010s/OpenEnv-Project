@@ -173,8 +173,12 @@ class EmailTriageEnv:
         if done:
             self.state.completed = True
 
+        def clamp_score(score: float) -> float:
+            """Ensures score is strictly between 0 and 1 (exclusive)."""
+            return max(0.001, min(0.999, float(score)))
+
         raw_score = self.state.score / len(self.dataset) if done else 0.1
-        task_score = max(0.01, min(0.99, raw_score))  # strictly between 0 and 1
+        task_score = clamp_score(raw_score)
         info = {"is_correct": is_correct, "task_score": task_score}
 
         return self._get_observation(), reward, done, info

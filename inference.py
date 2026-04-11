@@ -7,7 +7,9 @@ from client import PlayClient
 # ── Hackathon required variables ──────────────────────────────────
 API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
 MODEL_NAME   = os.environ.get("MODEL_NAME",   "gpt-3.5-turbo")
-HF_TOKEN     = os.environ.get("HF_TOKEN",     "dummy_token")
+HF_TOKEN     = os.environ.get("HF_TOKEN", "dummy_token")
+if HF_TOKEN is None:
+    raise ValueError("HF_TOKEN environment variable is required")
 
 client     = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
 env_client = PlayClient("http://localhost:7860")
@@ -55,48 +57,59 @@ Body:    {obs.get("body", "")}"""
 
 
 def run_task(task_id: str):
-    data = env_client.reset(task_id)
-    obs  = data.get("observation", {})
-    done = False
     step_num    = 0
     all_rewards = []
+    score       = 0.0
+    success     = False
 
     # ── [START] ───────────────────────────────────────────────────
     print(f"[START] task={task_id} env=email-triage model={MODEL_NAME}", flush=True)
 
-    while not done and step_num < 10:
-        step_num += 1
+    try:
+        data = env_client.reset(task_id)
+        obs  = data.get("observation", {})
+        done = False
 
-        llm_action = get_action(obs)
+        while not done and step_num < 10:
+            step_num += 1
 
-        step_data = env_client.step(Action(category=llm_action))
+            llm_action = get_action(obs)
 
-        obs    = step_data.get("observation", {})
-        reward = float(step_data.get("reward", 0.0))
-        done   = step_data.get("done", True)
-        error  = step_data.get("info", {}).get("error", None)
+            step_data = env_client.step(Action(category=llm_action))
 
-        all_rewards.append(reward)
+            obs    = step_data.get("observation", {})
+            reward = float(step_data.get("reward", 0.0))
+            done   = step_data.get("done", True)
+            error  = step_data.get("info", {}).get("error", None)
 
-        # ── [STEP] ────────────────────────────────────────────────
+            all_rewards.append(reward)
+
+            # ── [STEP] ────────────────────────────────────────────────
+            print(
+                f"[STEP] step={step_num} "
+                f"action={llm_action} "
+                f"reward={reward:.2f} "
+                f"done={str(done).lower()} "
+                f"error={error}",
+                flush=True,
+            )
+
+        # Calculate score as normalized average reward (in [0, 1])
+        score = sum(all_rewards) / (len(all_rewards) * 1.0) if all_rewards else 0.0
+        score = max(0.001, min(0.999, score))  # clamp to (0, 1) exclusive
+        success = score >= 0.5
+    except Exception:
+        pass
+    finally:
+        # ── [END] ─────────────────────────────────────────────────────
+        rewards_str = ",".join(f"{r:.2f}" for r in all_rewards)
         print(
-            f"[STEP] step={step_num} "
-            f"action={llm_action} "
-            f"reward={reward:.2f} "
-            f"done={str(done).lower()} "
-            f"error={error}",
+            f"[END] success={str(success).lower()} "
+            f"steps={step_num} "
+            f"score={score:.3f} "
+            f"rewards={rewards_str}",
             flush=True,
         )
-
-    # ── [END] ─────────────────────────────────────────────────────
-    success     = any(r >= 1.0 for r in all_rewards)
-    rewards_str = ",".join(f"{r:.2f}" for r in all_rewards)
-    print(
-        f"[END] success={str(success).lower()} "
-        f"steps={step_num} "
-        f"rewards={rewards_str}",
-        flush=True,
-    )
 
 
 if __name__ == "__main__":
